@@ -95,7 +95,7 @@ public class Main {
             int points = entry.getPoints();
             String status = entry.getStatus();
 
-            totalScores.putIfAbsent(name, 0); // Initialize score to 0 if not present
+            totalScores.putIfAbsent(name, 0);
 
             if ("win".equalsIgnoreCase(status)) {
                 totalScores.put(name, totalScores.get(name) + points);
