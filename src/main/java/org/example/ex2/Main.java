@@ -68,7 +68,26 @@ public class Main {
                 case 2:
                     System.out.print("Enter client name: ");
                     String clientName = scanner.nextLine();
-                    Client newClient = new Client(0, clientName, List.of());
+
+                    System.out.println("Enter the movie IDs to assign to this client (comma-separated): ");
+                    String movieIdsInput = scanner.nextLine();
+                    List<Movie> assignedMovies = new ArrayList<>();
+
+                    for (String movieIdStr : movieIdsInput.split(",")) {
+                        try {
+                            int movieId = Integer.parseInt(movieIdStr.trim());
+                            Movie movie = controller.getMovie(movieId);
+                            if (movie != null) {
+                                assignedMovies.add(movie);
+                            } else {
+                                System.out.println("Movie with ID " + movieId + " not found.");
+                            }
+                        } catch (NumberFormatException e) {
+                            System.out.println(movieIdStr + " is not a valid movie ID.");
+                        }
+                    }
+
+                    Client newClient = new Client(0, clientName, assignedMovies);
                     controller.addClient(newClient);
                     System.out.println("Client added.");
                     break;
@@ -77,9 +96,36 @@ public class Main {
                     int updateClientId = scanner.nextInt();
                     scanner.nextLine(); // Consume newline
                     Client clientToUpdate = controller.getClient(updateClientId);
+
                     if (clientToUpdate != null) {
-                        System.out.print("Enter new name: ");
-                        clientToUpdate.setName(scanner.nextLine());
+                        System.out.print("Enter new name (leave blank to keep current name): ");
+                        String newName = scanner.nextLine();
+                        if (!newName.isBlank()) {
+                            clientToUpdate.setName(newName);
+                        }
+
+                        System.out.println("Current movies assigned to the client: ");
+                        clientToUpdate.getMovies().forEach(System.out::println);
+
+                        System.out.println("Enter the movie IDs to update for this client (comma-separated): ");
+                        String movieIdsInputt = scanner.nextLine();
+                        List<Movie> updatedMovies = new ArrayList<>();
+
+                        for (String movieIdStr : movieIdsInputt.split(",")) {
+                            try {
+                                int movieId = Integer.parseInt(movieIdStr.trim());
+                                Movie movie = controller.getMovie(movieId);
+                                if (movie != null) {
+                                    updatedMovies.add(movie);
+                                } else {
+                                    System.out.println("Movie with ID " + movieId + " not found.");
+                                }
+                            } catch (NumberFormatException e) {
+                                System.out.println(movieIdStr + " is not a valid movie ID.");
+                            }
+                        }
+
+                        clientToUpdate.setMovies(updatedMovies);
                         System.out.println("Client updated.");
                     } else {
                         System.out.println("Client not found.");
@@ -200,6 +246,7 @@ public class Main {
             System.out.println(e.getMessage());
         }
     }
-    }
+
+}
 
 
