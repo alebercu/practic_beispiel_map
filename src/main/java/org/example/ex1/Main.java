@@ -38,18 +38,18 @@ public class Main {
             lines.forEach(line -> {
                 String[] parts = line.split("#");
 
-                if (parts.length == 7) { // Ensure correct format
+                if (parts.length == 7) {
                     try {
                         int id = Integer.parseInt(parts[0].trim());
                         String name = parts[1].trim();
-                        // Normalize house name to match enum constants
+
                         Group group = Group.valueOf(parts[2].trim().replace(" ", "_"));
                         String description = parts[3].trim();
                         Level level = Level.valueOf(parts[4].trim().replace(" ", "_"));
                         int pointAmount = Integer.parseInt(parts[5].trim());
                         String status = parts[6].trim();
 
-                        // Add the new PointsEntry object to the list
+
                         entries.add(new Entry(id, name, group, description,level, pointAmount,status));
                     } catch (IllegalArgumentException e) {
                         System.err.println("Error parsing line: " + line + " - " + e.getMessage());
@@ -106,6 +106,8 @@ public class Main {
 
         return totalScores;
     }
+
+
 
     public static void saveScoresToFile(Map<String, Integer> totalScores, String outputFilePath) {
         // Sort the scores in descending order
